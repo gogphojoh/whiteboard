@@ -168,11 +168,6 @@ export class WhiteboardComponent implements OnInit {
           },
         ],
       },
-      {
-        id: this.generateId(),
-        title: "Mamaguevo",
-        tasks: [],
-      },
     ];
   }
 
