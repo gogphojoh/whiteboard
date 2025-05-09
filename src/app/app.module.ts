@@ -1,25 +1,17 @@
-import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
-import { AppRoutingModule } from "./app-routing.module";
-import { AppComponent } from "./app.component";
-
-// Import your components
-import { WhiteboardComponent } from "./whiteboard/whiteboard.component";
+// src/app/app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    WhiteboardComponent, // Since it's a standalone component
+  declarations: [
+    AppComponent,
+    WhiteboardComponent  // Declarado aquí
   ],
-  providers: [],
-  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
