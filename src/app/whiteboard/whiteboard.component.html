@@ -2,12 +2,10 @@
   <!-- Board Header -->
   <div class="board-header">
     <h1 class="board-title">{{ board.title }}</h1>
-    <div class="board-actions">
-      <button class="board-action-btn" (click)="addingNewColumn = true" *ngIf="!addingNewColumn">
-        <i class="action-icon add-icon"></i>
-        Añadir columna
-      </button>
-    </div>
+    <button class="add-column-header-btn" (click)="addingNewColumn = true">
+      <i class="pi pi-plus"></i>
+      <span>Añadir columna</span>
+    </button>
   </div>
 
   <!-- Board Content -->
@@ -16,65 +14,84 @@
     <div class="columns-container">
       <!-- Column -->
       <div class="column" *ngFor="let column of board.columns">
-        <!-- Column Header -->
         <div class="column-header">
-          <div *ngIf="editingColumnId !== column.id" class="column-title-container">
-            <h3 class="column-title" (click)="startEditingColumn(column)">{{ column.title }}</h3>
+          <div
+            *ngIf="editingColumnId !== column.id"
+            class="column-title-container"
+          >
+            <h3 class="column-title">{{ column.title }}</h3>
             <div class="column-actions">
-              <button class="column-btn" (click)="openAddTaskModal(column)" title="Añadir tarea">
-                <i class="action-icon add-icon"></i>
+              <button class="column-btn" (click)="openAddTaskModal(column)">
+                <i class="pi pi-plus"></i>
               </button>
-              <button class="column-btn" (click)="deleteColumn(column.id)" title="Eliminar columna">
-                <i class="action-icon delete-icon"></i>
+              <button class="column-btn" (click)="deleteColumn(column.id)">
+                <i class="pi pi-times"></i>
               </button>
             </div>
           </div>
 
           <div *ngIf="editingColumnId === column.id" class="column-edit">
-            <input type="text" [(ngModel)]="editingColumnTitle" class="column-edit-input"
-                   (keyup.enter)="saveColumnTitle(column)" (keyup.escape)="cancelColumnEdit()" autofocus>
+            <input
+              type="text"
+              [(ngModel)]="editingColumnTitle"
+              class="column-edit-input"
+              (keyup.enter)="saveColumnTitle(column)"
+              (keyup.escape)="cancelColumnEdit()"
+              autofocus
+            />
             <div class="column-edit-actions">
-              <button class="column-btn" (click)="saveColumnTitle(column)" title="Guardar">
-                <i class="action-icon check-icon"></i>
+              <button class="column-btn" (click)="saveColumnTitle(column)">
+                <i class="pi pi-check"></i>
               </button>
-              <button class="column-btn" (click)="cancelColumnEdit()" title="Cancelar">
-                <i class="action-icon cancel-icon"></i>
+              <button class="column-btn" (click)="cancelColumnEdit()">
+                <i class="pi pi-times"></i>
               </button>
             </div>
           </div>
         </div>
 
         <!-- Column Tasks -->
-        <div class="column-tasks"
-             cdkDropList
-             [cdkDropListData]="column.tasks"
-             (cdkDropListDropped)="drop($event)"
-             [id]="column.id">
-
+        <div
+          class="column-tasks"
+          cdkDropList
+          [cdkDropListData]="column.tasks"
+          (cdkDropListDropped)="drop($event)"
+          [id]="column.id"
+        >
           <!-- Task Card -->
-          <div class="task-card"
-               *ngFor="let task of column.tasks"
-               cdkDrag
-               [cdkDragData]="task"
-               (click)="openEditTaskModal(task, column)">
-
+          <div
+            class="task-card"
+            *ngFor="let task of column.tasks"
+            cdkDrag
+            [cdkDragData]="task"
+            (click)="openEditTaskModal(task, column)"
+          >
             <div class="task-labels" *ngIf="task.labels.length">
-              <span class="task-label" *ngFor="let label of task.labels" [style.background-color]="label"></span>
+              <span
+                class="task-label"
+                *ngFor="let label of task.labels"
+                [style.background-color]="label"
+              ></span>
             </div>
 
             <div class="task-title">{{ task.title }}</div>
 
             <div class="task-footer">
               <div class="task-meta">
-                <div class="task-due" *ngIf="task.dueDate"
-                     [class.task-overdue]="isOverdue(task)"
-                     [class.task-due-soon]="isDueSoon(task)">
-                  <i class="meta-icon calendar-icon"></i>
+                <div
+                  class="task-due"
+                  *ngIf="task.dueDate"
+                  [class.task-overdue]="isOverdue(task)"
+                  [class.task-due-soon]="isDueSoon(task)"
+                >
+                  <i class="pi pi-calendar"></i>
                   {{ formatDate(task.dueDate) }}
                 </div>
 
                 <div class="task-assignee" *ngIf="task.assignedTo">
-                  <span class="assignee-badge">{{ task.assignedTo.charAt(0) }}</span>
+                  <span class="assignee-badge">{{
+                    task.assignedTo.charAt(0)
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -86,22 +103,35 @@
         </div>
 
         <!-- Add Task Button -->
-        <div class="add-task-btn" (click)="openAddTaskModal(column)">
-          <i class="action-icon add-icon"></i>
-          Añadir tarea
-        </div>
+        <button class="add-task-btn" (click)="openAddTaskModal(column)">
+          <i class="pi pi-plus"></i>
+          <span>Añadir tarea</span>
+        </button>
       </div>
 
       <!-- Add New Column Form -->
       <div class="column new-column" *ngIf="addingNewColumn">
         <div class="new-column-form">
-          <input type="text" [(ngModel)]="newColumnTitle" class="new-column-input"
-                 placeholder="Título de la columna" (keyup.enter)="addColumn()" autofocus>
+          <input
+            type="text"
+            [(ngModel)]="newColumnTitle"
+            class="new-column-input"
+            placeholder="Título de la columna"
+            (keyup.enter)="addColumn()"
+            autofocus
+          />
           <div class="new-column-actions">
-            <button class="column-btn add-btn" (click)="addColumn()" [disabled]="newColumnTitle.trim() === ''">
+            <button
+              class="new-column-btn add-btn"
+              (click)="addColumn()"
+              [disabled]="newColumnTitle.trim() === ''"
+            >
               Añadir
             </button>
-            <button class="column-btn cancel-btn" (click)="addingNewColumn = false">
+            <button
+              class="new-column-btn cancel-btn"
+              (click)="addingNewColumn = false"
+            >
               Cancelar
             </button>
           </div>
@@ -109,71 +139,152 @@
       </div>
 
       <!-- Add Column Button -->
-      <button class="add-column-btn" *ngIf="!addingNewColumn" (click)="addingNewColumn = true">
-        <i class="action-icon add-icon"></i>
-        Añadir columna
+      <button
+        class="add-column-btn"
+        *ngIf="!addingNewColumn"
+        (click)="addingNewColumn = true"
+      >
+        <i class="pi pi-plus"></i>
+        <span>Añadir columna</span>
       </button>
     </div>
   </div>
 
   <!-- Task Modal -->
-  <div class="modal-backdrop" *ngIf="showTaskModal" (click)="closeTaskModal()"></div>
-  <div class="task-modal" *ngIf="showTaskModal" (click)="$event.stopPropagation()">
+  <div
+    class="modal-backdrop"
+    *ngIf="showTaskModal"
+    (click)="closeTaskModal()"
+  ></div>
+  <div
+    class="task-modal"
+    *ngIf="showTaskModal"
+    (click)="$event.stopPropagation()"
+  >
     <div class="modal-header">
-      <h3 class="modal-title">{{ modalMode === 'create' ? 'Nueva Tarea' : 'Editar Tarea' }}</h3>
+      <h3 class="modal-title">
+        {{ modalMode === "create" ? "Nueva Tarea" : "Editar Tarea" }}
+      </h3>
       <button class="modal-close-btn" (click)="closeTaskModal()">×</button>
     </div>
 
     <div class="modal-body">
       <div class="form-group">
         <label for="taskTitle">Título</label>
-        <input type="text" id="taskTitle" class="form-control"
-               [(ngModel)]="taskTitle">
+        <input
+          type="text"
+          id="taskTitle"
+          class="form-control"
+          [(ngModel)]="taskTitle"
+        />
       </div>
 
       <div class="form-group">
         <label for="taskDescription">Descripción</label>
-        <textarea id="taskDescription" class="form-control" rows="3"
-                  [(ngModel)]="taskDescription"></textarea>
+        <textarea
+          id="taskDescription"
+          class="form-control"
+          rows="3"
+          [(ngModel)]="taskDescription"
+        ></textarea>
       </div>
 
       <div class="form-group">
         <label>Etiquetas</label>
         <div class="label-selector">
-          <div class="label-option" *ngFor="let label of labelColors"
-               [class.selected]="isLabelSelected(label.value)"
-               [style.background-color]="label.value"
-               (click)="toggleLabel(label.value)"
-               [title]="label.name">
-          </div>
+          <div
+            class="label-option"
+            *ngFor="let label of labelColors"
+            [class.selected]="isLabelSelected(label.value)"
+            [style.background-color]="label.value"
+            (click)="toggleLabel(label.value)"
+            [title]="label.name"
+          ></div>
         </div>
       </div>
 
       <div class="form-group">
         <label for="taskDueDate">Fecha límite</label>
-        <input type="date" id="taskDueDate" class="form-control"
-               [(ngModel)]="taskDueDate">
+        <input
+          type="date"
+          id="taskDueDate"
+          class="form-control"
+          [(ngModel)]="taskDueDate"
+        />
       </div>
 
       <div class="form-group">
         <label for="taskAssignee">Asignado a</label>
-        <input type="text" id="taskAssignee" class="form-control"
-               [(ngModel)]="taskAssignee">
+        <input
+          type="text"
+          id="taskAssignee"
+          class="form-control"
+          [(ngModel)]="taskAssignee"
+        />
       </div>
     </div>
 
     <div class="modal-footer">
-      <button class="modal-btn delete-btn" *ngIf="modalMode === 'edit'"
-              (click)="deleteTask(editingTask!.id, selectedColumn!)">
+      <button
+        class="modal-btn delete-btn"
+        *ngIf="modalMode === 'edit'"
+        (click)="deleteTask(editingTask!.id, selectedColumn!)"
+      >
         Eliminar
       </button>
       <button class="modal-btn cancel-btn" (click)="closeTaskModal()">
         Cancelar
       </button>
-      <button class="modal-btn save-btn"
-              (click)="modalMode === 'create' ? saveNewTask() : saveTaskChanges()"
-              [disabled]="taskTitle.trim() === ''">
+      <button
+        class="modal-btn save-btn"
+        (click)="modalMode === 'create' ? saveNewTask() : saveTaskChanges()"
+        [disabled]="taskTitle.trim() === ''"
+      >
         Guardar
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast container for notifications -->
+  <div class="toast-container" *ngIf="toastMessage">
+    <div class="toast-message" [class]="toastMessage.severity">
+      <div class="toast-content">
+        <div class="toast-summary">{{ toastMessage.summary }}</div>
+        <div class="toast-detail">{{ toastMessage.detail }}</div>
+      </div>
+      <button class="toast-close" (click)="toastMessage = null">×</button>
+    </div>
+  </div>
+
+  <!-- Confirmation dialog -->
+  <div
+    class="confirm-dialog-backdrop"
+    *ngIf="showConfirmDialog"
+    (click)="cancelConfirmation()"
+  ></div>
+  <div
+    class="confirm-dialog"
+    *ngIf="showConfirmDialog"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="confirm-dialog-header">
+      <h3 class="confirm-dialog-title">{{ confirmDialogOptions.header }}</h3>
+    </div>
+    <div class="confirm-dialog-content">
+      <i class="pi pi-exclamation-triangle confirm-dialog-icon"></i>
+      <span class="confirm-dialog-message">{{
+        confirmDialogOptions.message
+      }}</span>
+    </div>
+    <div class="confirm-dialog-footer">
+      <button
+        class="confirm-dialog-btn cancel-btn"
+        (click)="cancelConfirmation()"
+      >
+        No
+      </button>
+      <button class="confirm-dialog-btn confirm-btn" (click)="confirmAction()">
+        Sí
       </button>
     </div>
   </div>
